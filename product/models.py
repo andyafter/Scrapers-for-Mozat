@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text, SmallInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.url import URL
@@ -34,9 +35,9 @@ class ItemInfo(DeclarativeBase):
     # unless strongly urged I'm not gonna write any nullables
     tas_id = Column('tags_id', Text)
     update_time = Column('update_time', DateTime, nullable = False, default=datetime.datetime.utcnow)
-    category = Column('category', Integer(unsigned=True), nullable = False, default = 0)
-    sub_category = Column('sub_category', Integer(unsigned=True), nullable = False, default = 0)
-    brand = Column('brand', Integer(unsigned=True), nullable = False, default = 0)
+    category = Column('category', Integer, nullable = False, default = 0)
+    sub_category = Column('sub_category', Integer, nullable = False, default = 0)
+    brand = Column('brand', Integer, nullable = False, default = 0)
     detail_images = Column('detail_images', String(4000), nullable = False)
     thumb_images = Column('thumb_images', String(500), nullable = True)
     suitable_images = Column('suitable_images', String(500), nullable = False)
@@ -55,7 +56,6 @@ class ItemInfo(DeclarativeBase):
     buy_color = Column('buy_color', String(500), nullable = False, default='[]')
     stock_info = Column('stock_info', String(1000), nullable=False)
     status = Column('status', String(1000), nullable=False)
-
 
 
 class Test(DeclarativeBase):

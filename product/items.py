@@ -12,7 +12,33 @@ from scrapy.item import Item, Field
 class ProductItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    pid = scrapy.Field()
+    tag_source =scrapy.Field()
+    # unless strongly urged I'm not gonna write any nullables
+    tas_id =scrapy.Field()
+    update_time = scrapy.Field()
+    category = scrapy.Field()
+    sub_category = scrapy.Field()
+    brand = scrapy.Field()
+    detail_images = scrapy.Field()
+    thumb_images = scrapy.Field()
+    suitable_images = scrapy.Field()
+    white_suitable = scrapy.Field()
+    tag_status = scrapy.Field()
+    visenze_result = scrapy.Field()
+    merchant = scrapy.Field()
+    koutu = scrapy.Field()
+    shop_url = scrapy.Field()
+    brand_en = scrapy.Field()
+    merchant_en = scrapy.Field()
+    price = scrapy.Field()
+    discount_price = scrapy.Field()
+    discount_percent = scrapy.Field()
+    buy_size = scrapy.Field()
+    buy_color = scrapy.Field()
+    stock_info = scrapy.Field()
+    status = scrapy.Field()
+
 
 class Test(Item):
     """Livingsocial container (dictionary-like object) for scraped data"""

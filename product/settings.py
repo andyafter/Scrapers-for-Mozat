@@ -14,7 +14,8 @@ BOT_NAME = 'product'
 SPIDER_MODULES = ['product.spiders']
 NEWSPIDER_MODULE = 'product.spiders'
 
-ITEM_PIPELINES = ['product.pipelines.TestPipeline']
+ITEM_PIPELINES = ['product.pipelines.ProductPipeline',
+'product.pipelines.TestPipeline']
 
 # Depends on what you are using
 DATABASE = {
@@ -25,6 +26,24 @@ DATABASE = {
     'password':'',
     'database': 'crawler'
 }
+
+DOWNLOADER_MIDDLEWARES = {
+    #'product.middlewares.CustomDownloaderMiddleware': 543,
+    #'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 90,
+    # Fix path to this module
+    # the proxy stuff didn't really work out.
+    #'product.middleware.randomproxy.RandomProxy': 100,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+}
+
+
+# Retry many times since proxies often fail
+RETRY_TIMES = 10
+# Retry on most error codes since proxies fail for different reasons
+RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
+#PROXY_LIST = 'proxies.txt'
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'product (+http://www.yourdomain.com)'
