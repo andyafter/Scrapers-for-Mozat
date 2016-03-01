@@ -14,6 +14,17 @@ BOT_NAME = 'product'
 SPIDER_MODULES = ['product.spiders']
 NEWSPIDER_MODULE = 'product.spiders'
 
+ITEM_PIPELINES = ['product.pipelines.TestPipeline']
+
+# Depends on what you are using
+DATABASE = {
+    'drivername': 'postgres',
+    'host': 'localhost',
+    'port': '5432',
+    'username':'',
+    'password':'',
+    'database': 'crawler'
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'product (+http://www.yourdomain.com)'
