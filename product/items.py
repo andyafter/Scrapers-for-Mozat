@@ -7,15 +7,20 @@
 
 import scrapy
 from scrapy.item import Item, Field
+from scrapy_sqlitem import SqlItem
+from models import ItemInfo
 
 
-class ProductItem(scrapy.Item):
+class ProductItem(SqlItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    sqlmodel = ItemInfo
+    '''
+    name = scrapy.Field()
     pid = scrapy.Field()
     tag_source =scrapy.Field()
     # unless strongly urged I'm not gonna write any nullables
-    tas_id =scrapy.Field()
+    tag_id =scrapy.Field()
     update_time = scrapy.Field()
     category = scrapy.Field()
     sub_category = scrapy.Field()
@@ -38,7 +43,7 @@ class ProductItem(scrapy.Item):
     buy_color = scrapy.Field()
     stock_info = scrapy.Field()
     status = scrapy.Field()
-
+    '''
 
 class Test(Item):
     """Livingsocial container (dictionary-like object) for scraped data"""

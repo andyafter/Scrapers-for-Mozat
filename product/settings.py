@@ -14,8 +14,7 @@ BOT_NAME = 'product'
 SPIDER_MODULES = ['product.spiders']
 NEWSPIDER_MODULE = 'product.spiders'
 
-ITEM_PIPELINES = ['product.pipelines.ProductPipeline',
-'product.pipelines.TestPipeline']
+ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
 
 # Depends on what you are using
 DATABASE = {
@@ -24,7 +23,7 @@ DATABASE = {
     'port': '5432',
     'username':'',
     'password':'',
-    'database': 'crawler'
+    'database': 'algorithm'
 }
 
 DOWNLOADER_MIDDLEWARES = {

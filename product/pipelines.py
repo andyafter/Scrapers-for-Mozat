@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm import sessionmaker
-from models import Test,  db_connect, create_deals_table
-from items import ProductItem
+from models import Test, ItemInfo,  db_connect, create_deals_table
+from items import ProductItem, Test
 
 # Define your item pipelines here
 #
@@ -28,7 +28,6 @@ class ProductPipeline(object):
         session = self.Session()
         product = ProductItem(**item)
 
-        return None
         try:
             session.add(product)
             session.commit()
@@ -37,10 +36,7 @@ class ProductPipeline(object):
             raise
         finally:
             session.close()
-
-        print "seems good"
-        print item
-
+        print "success"
         return item
 
 
@@ -71,6 +67,4 @@ class TestPipeline(object):
             raise
         finally:
             session.close()
-        print "seems good"
-        print item
         return item
