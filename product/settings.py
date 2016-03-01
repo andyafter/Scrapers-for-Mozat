@@ -35,6 +35,8 @@ DOWNLOADER_MIDDLEWARES = {
     # the proxy stuff didn't really work out.
     #'product.middleware.randomproxy.RandomProxy': 100,
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
 }
 
 
