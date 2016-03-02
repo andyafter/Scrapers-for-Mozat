@@ -22,12 +22,13 @@ ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
 #DATABASE_URI = "sqlite:///"
 
 DATABASE = {
-    'drivername': 'postgres',
+    'drivername': 'mysql',
     'host': 'localhost',
-    'port': '5432',
-    'username':'',
+    #'port': '5432',
+    'port' : '3306',
+    'username':'root',
     'password':'',
-    'database': 'crawler'
+    'database': 'algorithm'
 }
 
 DOWNLOADER_MIDDLEWARES = {

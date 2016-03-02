@@ -2,7 +2,7 @@
 from sqlalchemy.orm import sessionmaker
 from models import   db_connect, create_deals_table
 from items import ProductItem, Test
-from models import Test,  db_connect, create_deals_table
+from models import ItemInfo,  db_connect, create_deals_table
 
 
 
@@ -18,9 +18,9 @@ class ProductPipeline(object):
         Initializes database connection and sessionmaker.
         Creates deals table.
         """
-        engine = db_connect()
-        create_deals_table(engine)
-        self.Session = sessionmaker(bind=engine)
+        self.engine = db_connect()
+        create_deals_table(self.engine)
+        self.Session = sessionmaker(bind=self.engine)
 
     def process_item(self, item, spider):
         """Save deals in the database.
@@ -29,45 +29,27 @@ class ProductPipeline(object):
 
         """
         session = self.Session()
-        '''
-        name
-        shop_url
-        pid
-        price
-        category
-        detail_images
-        name
-        shop_url
-        price
-        pid
-        buy_color
-        thumb_images
-        '''
-        '''
-        product = ProductItem(name=item['name'],
+        product = ItemInfo( pid=item['pid'],
+                             name=item['name'],
                               shop_url=item['shop_url'],
-                              pid=item['pid'],
                               price = item['price'],
                               category = item['category'],
                               detail_images = item['detail_images'],
                               buy_color = item['buy_color'],
                               thumb_images = item['thumb_images']
-        )'''
-        item = ProductItem(**item)
+        )
 
-        print product
         try:
-            product.commit_item(engine=engine)
-            #session.add(product)
-            #session.commit()
+            session.add(product)
+            session.commit()
         except:
             print "saving failed"
-            #session.rollback()
+            session.rollback()
             raise
-        #finally:
-            #session.close()
-
-        return item
+        finally:
+            session.close()
+        print "saved!!!!!"
+        return product
 
 
 class TestPipeline(object):

@@ -4,6 +4,8 @@ from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.loader import XPathItemLoader
 from scrapy.contrib.loader.processor import Join, MapCompose
 from scrapy.http.request import Request
+from product.items import ProductItem
+from product.models import ItemInfo
 
 from scrapy_sqlitem import SqlSpider
 from bs4 import BeautifulSoup
@@ -34,6 +36,7 @@ class ZaraSpider(BaseSpider):
                 for a in link.findAll('a'):
                     url = a.get('href')
                     meta  = {} # this is used to store the data
+                    meta['category'] = int(link.get('data-categoryid'))
                     yield Request(url,meta = meta,
                                   callback = self.parseCategory)
 
@@ -53,6 +56,7 @@ class ZaraSpider(BaseSpider):
                if  link.find('span'):
                    # might be empty
                    meta['price'] = int(float(link.find('span').get('data-price').split()[0]))
+#        pass
                yield Request(meta['shop_url'],meta = {'meta':meta},
                                   callback = self.parseItem)
 
@@ -62,7 +66,7 @@ class ZaraSpider(BaseSpider):
 
         # if meta price is empty you can add price here
         meta = response.meta['meta']
-        item = ProductItem()
+        item = {}
 
         # get price
         if not meta['price']:
@@ -80,7 +84,6 @@ class ZaraSpider(BaseSpider):
             else:
                 if i  in item:
                     continue
-                print i
                 item[i] = meta[i]
 
         # write some wrapper for this one
@@ -93,16 +96,16 @@ class ZaraSpider(BaseSpider):
         item['buy_color'] = ' '
 
         for img in timg:
-            if item['thumb_images'] == '':
+            if item['thumb_images'] == ' ':
                 item['thumb_images'] = img.find('img').get('src')
             item['thumb_images'] += '|' + img.find('img').get('src')
             for c in img.find_all('span'):
                 if not c.string:
                     continue
                 item['buy_color'] += ' ' + c.string
-                print c.string
+
+
         # did not find any description in the model
         #item['description'] = soup.find('p',{'class': 'description'}).find('span').string
-
 
         yield item
