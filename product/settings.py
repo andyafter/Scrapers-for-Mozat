@@ -14,16 +14,20 @@ BOT_NAME = 'product'
 SPIDER_MODULES = ['product.spiders']
 NEWSPIDER_MODULE = 'product.spiders'
 
+#ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
+
 ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
 
-# Depends on what you are using
+
+#DATABASE_URI = "sqlite:///"
+
 DATABASE = {
     'drivername': 'postgres',
     'host': 'localhost',
     'port': '5432',
     'username':'',
     'password':'',
-    'database': 'algorithm'
+    'database': 'crawler'
 }
 
 DOWNLOADER_MIDDLEWARES = {

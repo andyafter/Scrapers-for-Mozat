@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm import sessionmaker
-from models import Test, ItemInfo,  db_connect, create_deals_table
+from models import   db_connect, create_deals_table
 from items import ProductItem, Test
+from models import Test,  db_connect, create_deals_table
+
+
 
 # Define your item pipelines here
 #
@@ -26,17 +29,44 @@ class ProductPipeline(object):
 
         """
         session = self.Session()
-        product = ProductItem(**item)
+        '''
+        name
+        shop_url
+        pid
+        price
+        category
+        detail_images
+        name
+        shop_url
+        price
+        pid
+        buy_color
+        thumb_images
+        '''
+        '''
+        product = ProductItem(name=item['name'],
+                              shop_url=item['shop_url'],
+                              pid=item['pid'],
+                              price = item['price'],
+                              category = item['category'],
+                              detail_images = item['detail_images'],
+                              buy_color = item['buy_color'],
+                              thumb_images = item['thumb_images']
+        )'''
+        item = ProductItem(**item)
 
+        print product
         try:
-            session.add(product)
-            session.commit()
+            product.commit_item(engine=engine)
+            #session.add(product)
+            #session.commit()
         except:
-            session.rollback()
+            print "saving failed"
+            #session.rollback()
             raise
-        finally:
-            session.close()
-        print "success"
+        #finally:
+            #session.close()
+
         return item
 
 
@@ -67,4 +97,6 @@ class TestPipeline(object):
             raise
         finally:
             session.close()
+        print "seems good"
+        print item
         return item
