@@ -38,10 +38,23 @@ class ZaraSpider(BaseSpider):
                                   callback = self.parseCategory)
 
     def parseCategory(self, response):
-        print response.meta
         soup = BeautifulSoup(str(response.body), 'lxml')
-        #return None
-        pass
+        products = soup.find_all('li')
+        for link in products:
+            if not link.get('class'):
+                continue
+            if 'product' in link.get('class'):
+               meta = {}
+               meta['shop_url'] = 'http:' + link.find('a', {"class":'item'}).get('href')
+               meta['pid'] = 'zara-' + link.get('id')
+               meta['name'] = link.find('a',{'class': 'name'}).string
+               meta['category'] = response.meta['category']
+               meta['image'] = link.find('img').get('src')
+               if  link.find('span'):
+                   # might be empty
+                   meta['price'] = int(float(link.find('span').get('data-price').split()[0]))
+               yield Request(meta['shop_url'],meta = {'meta':meta},
+                                  callback = self.parseItem)
 
     def parseItem(self, response):
         soup = BeautifulSoup(str(response.body), 'lxml')
