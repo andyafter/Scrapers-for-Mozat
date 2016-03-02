@@ -22,11 +22,11 @@ ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
 #DATABASE_URI = "sqlite:///"
 
 DATABASE = {
-    'drivername': 'mysql',
+    'drivername': 'postgres',
     'host': 'localhost',
-    #'port': '5432',
-    'port' : '3306',
-    'username':'root',
+    'port': '5432',
+    #'port' : '3306',
+    'username':'',
     'password':'',
     'database': 'algorithm'
 }
