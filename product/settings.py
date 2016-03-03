@@ -11,13 +11,15 @@
 
 BOT_NAME = 'product'
 
-SPIDER_MODULES = ['product.spiders']
+SPIDER_MODULES = ['product.spiders',
+'product.spiders.princessa']
 NEWSPIDER_MODULE = 'product.spiders'
 
 #ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
 
 ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
 
+FRONTERA_SETTINGS = 'product/frontera/settings.py'
 
 #DATABASE_URI = "sqlite:///"
 

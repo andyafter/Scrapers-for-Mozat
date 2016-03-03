@@ -5,7 +5,7 @@ from scrapy.contrib.loader import XPathItemLoader
 from scrapy.contrib.loader.processor import Join, MapCompose
 from scrapy.http.request import Request
 
-from configurable_spider.crawler_config import CrawlerConfigure
+from product.spiders.configurable_spider.crawler_config import CrawlerConfigure
 
 
 class PrincessaSpider(BaseSpider):
