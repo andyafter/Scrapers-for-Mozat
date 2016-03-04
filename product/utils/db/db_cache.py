@@ -6,7 +6,7 @@ def escape_quotes(my_str):
 class DB_Cache(object):
     '''
     must call the flush manually.
-    '''    
+    '''
     def __init__(self, cache_size, conn_config, table_name, columns=[], verbose=False):
         assert(type(cache_size) == int)
         self.enable = False
@@ -19,11 +19,11 @@ class DB_Cache(object):
         self.columns = columns
 
         self.verbose = verbose
-        
+
     def enable_cache(self):
         self.enable = True
         self.flush()
-    
+
     def disable_cache(self):
         self.enable = False
         self.flush()
@@ -34,9 +34,9 @@ class DB_Cache(object):
         self.cache.append(row)
         if self.enable == False or len(self.cache) >= self.cache_size:
             self.flush()
-            
+
     def flush(self):
-        'insert all rows in self.cache into db' 
+        'insert all rows in self.cache into db'
         raise NotImplementedError()
 
 
@@ -65,15 +65,15 @@ class InsertProductTagSource(DB_Cache):
 
 class InsertProduct(DB_Cache):
     def __init__(self, cache_size, conn_config, verbose=False):
-        DB_Cache.__init__(self, cache_size, conn_config, 'algorithm.product', ['pid', 'tag_source', 'update_time', 'merchant', 'suitable_images', 'white_suitable', 'detail_images', 'shop_url', 'merchant_en', 'brand_en', 'price', 'discount_price',
-                                                                               'discount_percent'], verbose)
+        DB_Cache.__init__(self, cache_size, conn_config, 'algorithm.product', ['pid', 'tag_source', 'update_time', 'merchant', 'suitable_images', 'white_suitable', 'detail_images', 'shop_url', 'merchant_en', 'brand_en', 'price', 'discount_price', 'discount_percent'], verbose)
 
     def flush(self):
         if self.cache:
             INSERT_SQL = '''
-                insert into algorithm.product(`pid`, `tag_source`, `update_time`, `brand`, `merchant`, `suitable_images`, `white_suitable`
-                `detail_images`, `shop_url`, `brand_en`, `merchant_en`, `price`, `discount_price`, `discount_percent`) values
+                insert into algorithm.product(`pid`, `tag_source`, `update_time`, `merchant`, `suitable_images`,
+        `detail_images`, `shop_url`, `merchant_en`, `brand_en`, `price`, `discount_price`, `discount_percent`) values
             '''
+            # remember here there is some bug with the position of merchant_en and brand_en
             values = []
             try:
                 for row in self.cache:
@@ -83,6 +83,8 @@ class InsertProduct(DB_Cache):
                 sql = INSERT_SQL + ',\n'.join(values)
                 if self.verbose:
                     print sql
+                print "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
+                print sql
                 self.conn.execute(sql)
             except Exception as e:
                 print e

@@ -13,6 +13,9 @@ from product.spiders.configurable_spider.crawler_config import CrawlerConfigure
 from product.spiders.configurable_spider.constants import *
 from product.spiders.configurable_spider.common_utils import getLogger, qualify_link
 
+from bs4 import BeautifulSoup
+import re
+
 logger = getLogger(__name__)
 
 
@@ -31,39 +34,65 @@ class PrincessaSpider(Spider):
         self.conf_name = self.config[NAME]
         self.parsed_collection_page = []
     '''
+    def __init__(self):
+        # simple method to deal with XHR in this website
+        self.urls = ['http://www.shopprincessa.com/store' + '/page/' + str(i) for i in range(2,21)]
+        self.urls.append('http://www.shopprincessa.com/store')
 
     def parse(self, response):
-        print "Yes!!!!!"
-        print "right here"
+        '''
         item = SpiderItem()
-        item['category'] = "hahaha"
-        item['info'] = "info"
-        item['name'] = "andy"
-        item['brand_en'] = "andybrand"
-        item['description'] = 'as'
-        item['pid'] = "12345"
-        item['merchant'] = 1
-        item['detail_images'] = "ima|ima"
-        item['detail_image_path'] = "haha|haha"
-        item['suitable_images'] = "hahahaha"
-        item['suitable_images_index'] = 0
-        item['white_suitable_images_index'] = 0
-        item['white_suitable_images'] = "haha"
+        item['category'] = "hahaha" # here
+        item['info'] = "info" # what is info?
+        item['name'] = "andy" #done
+        item['brand_en'] = "andybrand" #done
+        item['description'] = 'as' # description
+        item['pid'] = "12345" # done
+        item['merchant'] = 1 # done
+        item['detail_images'] = "ima|ima" # done
+        item['detail_image_path'] = "haha|haha" # done
+        item['suitable_images'] = "hahahaha" # done
+        item['suitable_images_index'] = 0 # done
+        item['white_suitable_images_index'] = 0 # done
+        item['white_suitable_images'] = "haha" # done
+        item['url'] = 'sdajsdad' #done
+        item['merchant_en'] = "ba" # done
+        item['brand_en'] = 'soe' #done
+        item['price'] = 100 # done
+        item['discount_price'] = 20 # done
+        '''
+        for link in self.urls:
+            yield Request(link, callback = self.parseBrief)
 
-        item['url'] = 'sdajsdad'
-        item['merchant_en'] = "ba"
-        item['brand_en'] = 'soe'
-        item['price'] = 100
-        item['discount_price'] = 20
+    def parseBrief(self, response):
+        soup = BeautifulSoup(str(response.body), 'lxml')
+        product = soup.find_all('div', {'class': re.compile(r'product\b')})
+        brief = soup.find_all('a', {'class': 'product-content-image'})
+        for link in product:
+            if 'product' not in link.get('class'):
+                continue
+            item = SpiderItem()
+            #print link.get('class')
+            item['merchant'] = 82
+            item['url'] =  link.find('a').get('href')
+            item['category'] = "Princessa women" # since here there is no way you can find the category
+            item['suitable_images'] = link.find('img').get('src')
+            item['suitable_images_index'] = 1
+            item['white_suitable_images'] = " "
+            item['white_suitable_images_index'] = 0
+            item['merchant_en'] = 'Princessa'
+            item['brand_en'] = 'princessa'
+            item['name'] = link.find('div', {'class': 'product-title'}).get_text()
+            item['info'] = link.find('div',{'class': 'product-excerpt'}).get_text().split(')')[-1]
+            for des in link.find('div',{'class': 'product-excerpt'}):
+                item['description'] = des.strip()
+                break
+            item['pid'] ='princessa-'+ link.find('span', {'class': 'show-quickly'}).get('data-prodid')
 
+            price = link.find('span', {'class': 'amount'}).get_text()
+            item['price'] = int(float(price[1:])*100)
+            item['discount_price'] = 0 # not sure, didn't find any
+
+            for i in link.find_all('a', {'class': 'product-content-image'}):
+                item['detail_image_path'] = '|'.join(i.get('data-images').split(','))
         yield item
-
-
-'''
-if __name__ == '__main__':
-    #os.environ["SCRAPY_SETTINGS_MODULE"] = "src.spiders.young_hungry_free_configurable.young_hungry_free_configurable.settings"
-    process = CrawlerProcess(get_project_settings())
-    process.crawl(ConfigurableSpider,*(None, 'princessa.json'))
-    process.start()
-    print 'Finished'
-'''

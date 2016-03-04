@@ -68,13 +68,16 @@ class ProductPipeline(object):
 
         # alright I'm not sure why but you must make sure that this record is
         # not empty in my local database
-        new_record['stock_info'] = 'info'
+        #new_record['stock_info'] = 'info'
 
         if item['discount_price']:
             new_record['discount_percent'] = 100 - (item['discount_price']*100/item['price'])
         else:
             new_record['discount_percent'] = 0
-        print 'Store to database:' + str(new_record)
+        #print 'Store to database:' + str(new_record)
+        for i in new_record:
+            print "hhhhhhhhhhhhh"
+            print i, type(new_record[i])
         self.write_conn.add(new_record)
         print "stored!!!!!!!"
         return item
