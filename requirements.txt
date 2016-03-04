@@ -5,6 +5,7 @@ cryptography==1.2.2
 cssselect==0.9.1
 enum34==1.1.2
 fake-useragent==0.0.8
+frontera==0.4.1
 functools32==3.2.3.post2
 idna==2.0
 ipaddress==1.0.16
