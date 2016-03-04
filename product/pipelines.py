@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm import sessionmaker
 from models import   db_connect, create_deals_table
-from items import ProductItem, Test
+from items import ProductItem
 from models import ItemInfo,  db_connect, create_deals_table
 
 from product.utils.config import ALGORITHM_MYSQL_CONFIG
@@ -11,6 +11,7 @@ from product.utils.tag_source_process import process_tag_source_dic
 
 import copy
 import json
+from time import strftime
 
 
 
@@ -37,7 +38,6 @@ class ProductPipeline(object):
             return False
 
     def process_item(self, item, spider):
-        print "piping"
         new_record = {}
         tag_source = {}
         tag_source['category'] = item['category']
@@ -47,6 +47,7 @@ class ProductPipeline(object):
         tag_source['description'] = item['description']
         tag_source = process_tag_source_dic(tag_source)
         new_record['tag_source'] = json.dumps(tag_source)
+        # print new_record['tag_source']
         if self.is_duplicated(item['pid'], new_record['tag_source']):
             return item
         new_record['pid'] = item['pid']
@@ -64,12 +65,18 @@ class ProductPipeline(object):
         new_record['merchant_en'] = item['merchant_en']
         new_record['price'] = item['price']
         new_record['discount_price'] = item['discount_price']
+
+        # alright I'm not sure why but you must make sure that this record is
+        # not empty in my local database
+        new_record['stock_info'] = 'info'
+
         if item['discount_price']:
             new_record['discount_percent'] = 100 - (item['discount_price']*100/item['price'])
         else:
             new_record['discount_percent'] = 0
         print 'Store to database:' + str(new_record)
         self.write_conn.add(new_record)
+        print "stored!!!!!!!"
         return item
 
 

@@ -22,6 +22,25 @@ class ProductItem(SqlItem):
     # I used dirty ways
 
 
-class Test(Item):
-    """Livingsocial container (dictionary-like object) for scraped data"""
-    title = Field()
+class SpiderItem(Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+#     def __init__(self):
+    url = scrapy.Field()
+    name = scrapy.Field()
+    category = scrapy.Field()
+    description = scrapy.Field()
+    info = scrapy.Field()
+    pid = scrapy.Field()
+    price = scrapy.Field()
+    detail_images = scrapy.Field()
+    detail_image_path = scrapy.Field()
+    discount_price = scrapy.Field()
+    white_suitable_images = scrapy.Field()
+    white_suitable_images_index = scrapy.Field()
+    suitable_images = scrapy.Field()
+    suitable_images_index = scrapy.Field()
+    merchant = scrapy.Field()
+    brand_en = scrapy.Field()
+    merchant_en = scrapy.Field()
+    pass

@@ -4,7 +4,7 @@ from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.loader import XPathItemLoader
 from scrapy.contrib.loader.processor import Join, MapCompose
 
-from product.items import Test
+from product.items import ProductItem
 
 
 class FirstTestSpider(BaseSpider):
@@ -20,7 +20,8 @@ class FirstTestSpider(BaseSpider):
     }
 
     def parse(self, response):
-        result = Test(title="test")
+        result = ProductItem()
         print "here is the parse"
         print result
-        yield  result
+        #yield  result
+        pass

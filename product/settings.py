@@ -11,8 +11,8 @@
 
 BOT_NAME = 'product'
 
-SPIDER_MODULES = ['product.spiders',
-'product.spiders.princessa']
+SPIDER_MODULES = ['product.spiders']
+#'product.spiders.princessa']
 NEWSPIDER_MODULE = 'product.spiders'
 
 #ITEM_PIPELINES = ['product.pipelines.ProductPipeline']
@@ -32,6 +32,18 @@ DATABASE = {
     'password':'',
     'database': 'algorithm'
 }
+
+ALGORITHM_MYSQL_CONFIG = {
+        #'host' : "172.28.2.61",
+        'host': '127.0.0.1',
+        'type': "mysql",
+        'port': '3306',
+        #'username': 'mozone',
+        #'password': 'morangerunmozone',
+        'username': 'root',
+        'password': 'sudoku214211,',
+        'database': 'algorithm'}
+
 
 DOWNLOADER_MIDDLEWARES = {
     #'product.middlewares.CustomDownloaderMiddleware': 543,

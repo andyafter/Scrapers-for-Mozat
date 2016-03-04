@@ -1,5 +1,6 @@
 __author__ = 'mozat-pc'
 from os.path import join
+from product.settings import ALGORITHM_MYSQL_CONFIG
 
 RAW_INFO_TAG_ROOT = r'C:\Users\mozat-pc\deja_tag\raw_tag_info'
 
@@ -66,7 +67,7 @@ QUARTTE_INFO = {
                           }
 
 #Urban slings
-URBAN_SLINGS_DATA_DIRECTORY = 'C:/Users/mozat-pc/deja_tag/raw_tag_info/urban_slings/clothes' 
+URBAN_SLINGS_DATA_DIRECTORY = 'C:/Users/mozat-pc/deja_tag/raw_tag_info/urban_slings/clothes'
 
 URBAN_SLINGS_INFO = {
                           'merchant' : 54,
@@ -168,7 +169,7 @@ THE_EDITORS_MARKETS_INFO = {
                           'gender': 0
                           }
 
-#ADD UNIQLO 
+#ADD UNIQLO
 UNIQLO_DATA_DIRECTORY = 'C:/Users/mozat-pc/deja_tag/raw_tag_info/uniqlo/clothes/test_data'
 
 UNIQLO_INFO = {
@@ -253,17 +254,6 @@ ASOS_INFO = {
 #         'database': 'deja_fashion'}
 
 
-ALGORITHM_MYSQL_CONFIG = {
-        #'host' : "172.28.2.61",
-        'host': '127.0.0.1',
-        'type': "mysql",
-        'port': '3306',
-        #'username': 'mozone',
-        #'password': 'morangerunmozone',
-        'username': 'root',
-        'password': 'sudoku214211,',
-        'database': 'algorithm'}
-
 
 BATCH_SIZE = 5000
 
@@ -294,5 +284,3 @@ REQUEST_META = {
 REQUEST_HEADER = {
           'User-Agent' : "Magic Browser",
           }
-
-
