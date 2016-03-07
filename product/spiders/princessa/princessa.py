@@ -40,27 +40,6 @@ class PrincessaSpider(Spider):
         self.urls.append('http://www.shopprincessa.com/store')
 
     def parse(self, response):
-        '''
-        item = SpiderItem()
-        item['category'] = "hahaha" # here
-        item['info'] = "info" # what is info?
-        item['name'] = "andy" #done
-        item['brand_en'] = "andybrand" #done
-        item['description'] = 'as' # description
-        item['pid'] = "12345" # done
-        item['merchant'] = 1 # done
-        item['detail_images'] = "ima|ima" # done
-        item['detail_image_path'] = "haha|haha" # done
-        item['suitable_images'] = "hahahaha" # done
-        item['suitable_images_index'] = 0 # done
-        item['white_suitable_images_index'] = 0 # done
-        item['white_suitable_images'] = "haha" # done
-        item['url'] = 'sdajsdad' #done
-        item['merchant_en'] = "ba" # done
-        item['brand_en'] = 'soe' #done
-        item['price'] = 100 # done
-        item['discount_price'] = 20 # done
-        '''
         for link in self.urls:
             yield Request(link, callback = self.parseBrief)
 
