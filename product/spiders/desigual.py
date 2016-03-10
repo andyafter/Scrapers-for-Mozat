@@ -16,8 +16,13 @@ from product.spiders.configurable_spider.common_utils import getLogger, qualify_
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from ghost import Ghost
+#from ghost import Ghost
 import re
+#from ghost import Ghost
+from selenium import selenium
+
+# starting the ghost for crawler
+#ghost = Ghost()
 
 
 class DesigualSpider(Spider):
@@ -37,18 +42,24 @@ class DesigualSpider(Spider):
         ]
         self.img = {}
         self.count = 0
+        self.sel = selenium("localhost", 8000, "*firefox","http://www.desigual.com/en_MT/women/")
+        self.sel.start()
 
     def parse(self, response):
+        sel = self.sel
+        print sel.get_html_source()
+        '''
         for i in range(2,33):
             # wired, when you set the number larger than the maximum
             # it always returns the last page
             self.urls.append(self.urls[0] + 'page/' + str(i) +'/')
 
-        ghost = Ghost()
+        #ghost = Ghost()
 
         for link in self.urls:
             yield Request(link, callback = self.parseBrief)
             break
+        '''
 
     def parseBrief(self, response):
         '''
