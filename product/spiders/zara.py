@@ -4,8 +4,7 @@ from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.loader import XPathItemLoader
 from scrapy.contrib.loader.processor import Join, MapCompose
 from scrapy.http.request import Request
-from product.items import ProductItem
-from product.models import ItemInfo
+from product.items import SpiderItem
 
 from scrapy_sqlitem import SqlSpider
 from bs4 import BeautifulSoup
@@ -21,7 +20,6 @@ class ZaraSpider(BaseSpider):
     def parse(self, response):
         print "start parsing!!!"
         soup = BeautifulSoup(str(response.body), 'lxml')
-        #print response.body
         #category_links = soup.find_all('li', {"class": "_category-links"})
         category_links = soup.find_all('li')
         for link in category_links:
@@ -36,7 +34,10 @@ class ZaraSpider(BaseSpider):
                 for a in link.findAll('a'):
                     url = a.get('href')
                     meta  = {} # this is used to store the data
-                    meta['category'] = int(link.get('data-categoryid'))
+                    if a.string.lower() is 'view all':
+                        print a.string
+                        continue
+                    meta['category'] = a.string
                     yield Request(url,meta = meta,
                                   callback = self.parseCategory)
 
@@ -48,16 +49,24 @@ class ZaraSpider(BaseSpider):
                 continue
             if 'product' in link.get('class'):
                meta = {}
-               meta['shop_url'] = 'http:' + link.find('a', {"class":'item'}).get('href')
-               meta['pid'] = 'zara-' + link.get('id')
+               meta['url'] = 'http:' + link.find('a', {"class":'item'}).get('href')
+               meta['pid'] = 'zara_' + link.get('id').split('-')[1]
                meta['name'] = link.find('a',{'class': 'name'}).string
                meta['category'] = response.meta['category']
-               meta['image'] = link.find('img').get('src')
+               meta['suitable_images'] = link.find('img').get('src')
+               meta['suitable_images_index'] = 1
+               #meta['brand'] = 9 # brand id
+               meta['merchant'] =74  # merchant id
+               meta['brand_en'] = 'zara'
+               meta['merchant_en'] = 'Zara'
+               meta['discount_price'] = 0 # no discount in zata
+               meta['white_suitable_images'] = " "
+               meta['white_suitable_images_index'] = 0
                if  link.find('span'):
                    # might be empty
-                   meta['price'] = int(float(link.find('span').get('data-price').split()[0]))
+                   meta['price'] = int(float(link.find('span').get('data-price').split()[0])*100)
 #        pass
-               yield Request(meta['shop_url'],meta = {'meta':meta},
+               yield Request(meta['url'],meta = {'meta':meta},
                                   callback = self.parseItem)
 
     def parseItem(self, response):
@@ -66,7 +75,15 @@ class ZaraSpider(BaseSpider):
 
         # if meta price is empty you can add price here
         meta = response.meta['meta']
-        item = {}
+        item = SpiderItem()
+
+        # this is the version of pid from google drive doc
+        n = 0
+        for i in soup.findAll('p',{'class': 'reference'}):
+            item['pid'] = 'zara_' + i.string.split()[1]
+
+        item['info'] = ' ' # no information for this one
+        item['description'] = item['info']
 
         # get price
         if not meta['price']:
@@ -76,7 +93,8 @@ class ZaraSpider(BaseSpider):
                     continue
                 if 'price' in p.get('class'):
                     # simply because that in the doc, price was tagged as integer
-                    meta['price'] = int(float(p.find('span').get('data-price')))
+                    meta['price'] = int(float(p.find('span').get('data-price'))*100)
+                    print meta['price']
 
         for i in meta:
             if i is 'image':
@@ -86,26 +104,10 @@ class ZaraSpider(BaseSpider):
                     continue
                 item[i] = meta[i]
 
-        # write some wrapper for this one
-        # for thumb_imagesite
-        item['detail_images'] = meta['image']
+        images = []
         for img in pics:
-            item['detail_images'] += "|" + img.get('href')
-        item['thumb_images'] = " "
-        timg = soup.find_all('div',{'class': 'colors _colors'})
-        item['buy_color'] = ' '
+            images.append(img.get('href'))
+        item['detail_image_path'] = '|'.join(images)
 
-        for img in timg:
-            if item['thumb_images'] == ' ':
-                item['thumb_images'] = img.find('img').get('src')
-            item['thumb_images'] += '|' + img.find('img').get('src')
-            for c in img.find_all('span'):
-                if not c.string:
-                    continue
-                item['buy_color'] += ' ' + c.string
-
-
-        # did not find any description in the model
         #item['description'] = soup.find('p',{'class': 'description'}).find('span').string
-
         yield item
