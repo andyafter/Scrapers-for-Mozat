@@ -53,36 +53,12 @@ class DesigualSpider(Spider):
             # wired, when you set the number larger than the maximum
             # it always returns the last page
             self.urls.append(self.urls[0] + 'page/' + str(i) +'/')
-
-        #ghost = Ghost()
-
         for link in self.urls:
             yield Request(link, callback = self.parseBrief)
             break
         '''
 
     def parseBrief(self, response):
-        '''
-        item = SpiderItem()
-        item['category'] = "hahaha" #
-        item['info'] = "info" #
-        item['name'] = "andy" #
-        item['brand_en'] = "andybrand" #
-        item['description'] = 'as' #
-        item['pid'] = "12345" #
-        item['merchant'] = 1 #
-        item['detail_images'] = "ima|ima" #
-        item['detail_image_path'] = "haha|haha" #
-        item['suitable_images'] = "hahahaha" #
-        item['suitable_images_index'] = 0 #
-        item['white_suitable_images_index'] = 0 #
-        item['white_suitable_images'] = "haha" #
-        item['url'] = 'sdajsdad' #
-        item['merchant_en'] = "ba" #
-        item['brand_en'] = 'soe' #
-        item['price'] = 100 #
-        item['discount_price'] = 20 #
-        '''
         soup = BeautifulSoup(str(response.body), 'lxml')
         category_links = soup.find_all('div', {'class': 'image quick-buy-item subsection-col'})
 
