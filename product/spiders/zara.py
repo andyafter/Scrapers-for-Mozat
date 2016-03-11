@@ -6,7 +6,6 @@ from scrapy.contrib.loader.processor import Join, MapCompose
 from scrapy.http.request import Request
 from product.items import SpiderItem
 
-from scrapy_sqlitem import SqlSpider
 from bs4 import BeautifulSoup
 
 

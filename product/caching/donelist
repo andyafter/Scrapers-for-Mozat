@@ -1,7 +1,7 @@
         item = SpiderItem()
         item['category'] = "hahaha" #
         item['info'] = "info" #
-        item['name'] = "andy" # done
+        item['name'] = "andy" # 
         item['brand_en'] = "andybrand" #
         item['description'] = 'as' #
         item['pid'] = "12345" #
@@ -16,3 +16,4 @@
         item['brand_en'] = 'soe' #
         item['price'] = 100 #
         item['discount_price'] = 20 #
+        
