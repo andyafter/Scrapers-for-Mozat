@@ -46,7 +46,7 @@ class BershkaSpider(Spider):
         self.driver.close()
 
     def parse(self, response):
-        self.driver.get(response.url)
+        self.driver.get(responsee.url)
         button = WebDriverWait(self.driver, 10).until(
             #EC.visibility_of_element_located((By.XPATH, "//li[contains(@id, '-link')]"))
             EC.visibility_of_element_located((By.XPATH, "//a"))
@@ -70,31 +70,55 @@ class BershkaSpider(Spider):
         self.driver.get(link)
         bg = self.driver.find_element_by_css_selector('body')
 
-        #self.driver.execute_script('console.log("hahahahaha");')
+        # scroll till end
         lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
         match=False
         while(match==False):
                 lastCount = lenOfPage
+                # here is the sleeping time
                 time.sleep(0.1)
                 lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
                 if lastCount==lenOfPage:
                     match=True
 
         all_items = self.driver.find_elements(By.XPATH, "//li[contains(@class, 'item')]")
-        #item = {}
 
+        item = {}
         links = {}
-        for item in all_items:
-            print "right hahahahaha"
-            print len(item.find_elements(By.XPATH, '//a'))
+        for li in all_items:
+            a = li.find_element_by_xpath("//a")
+            item["url"] = a.get_attribute("href")
+            img = li.find_element_by_xpath("//img")
+            item['suitable_images'] = img.get_attribute('src')
+            item['suitable_images_index'] = 1
+            info = li.find_element_by_xpath("//div[contains(@class, 'prodinfo')]")
+            price = li.find_element_by_xpath("//span[contains(@class, 'productPrice')]").text
+            item['price'] = int(float(price[1:])*100)
+            self.parseItem(item)
+            break
+        # actually here I cannot yield the whole stuff.
+
             # M-x comment-dwin
             # for link in  item.find_elements(By.XPATH, '//a'):
             #     print "right here"
             #     if  link.get_attribute('href') not in links:
             #         links[(link.get_attribute('href'))] = 0
             #         break
-        print '/n'.join(links)
-        print len(links)
 
-    def parseItem(self, item):
+
+    def parseItem(self, partial_item):
+        item = SpiderItem()
+        print item['url'].split('/')
+        item.update(partial_item)
+        item['discount_price'] = 0
+        item['brand_en'] ="bershka"
+        item['merchant_en'] = 'Bershka'
+        item['merchant'] = 85
+        # C-m a s i (modify add spider item)
+        # well if you use emacs, can go to my branch to download these
+        # small stuff, works better if you are familiar
+        item['white_suitable_images_index'] = 0
+        item['white_suitable_images'] = ""
+        item['']
+        print item
         pass
