@@ -26,14 +26,6 @@ class PrincessaSpider(Spider):
         'http://www.shopprincessa.com/',
     )
 
-    '''
-    # will come back to configurable crawler later
-    def __init__(self, config, config_file, **kwargs):
-        super(Spider, self).__init__(**kwargs)
-        self.config = CrawlerConfigure(config, config_file).config
-        self.conf_name = self.config[NAME]
-        self.parsed_collection_page = []
-    '''
     def __init__(self):
         # simple method to deal with XHR in this website
         self.urls = ['http://www.shopprincessa.com/store' + '/page/' + str(i) for i in range(2,21)]
@@ -41,6 +33,7 @@ class PrincessaSpider(Spider):
 
     def parse(self, response):
         for link in self.urls:
+            print "links"
             yield Request(link, callback = self.parseBrief)
 
     def parseBrief(self, response):
@@ -74,4 +67,4 @@ class PrincessaSpider(Spider):
 
             for i in link.find_all('a', {'class': 'product-content-image'}):
                 item['detail_image_path'] = '|'.join(i.get('data-images').split(','))
-        yield item
+            yield item
