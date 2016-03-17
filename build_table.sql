@@ -1,8 +1,7 @@
-DROP DATABASE IF EXISTS algorithm;
-create database algorithm;
 use algorithm;
+drop table product;
 CREATE TABLE `product` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOproductidT NULL AUTO_INCREMENT,
   `pid` varchar(45) NOT NULL DEFAULT '',
   `tag_source` text NOT NULL,
   `tags_id` varchar(1000) NOT NULL DEFAULT '',
