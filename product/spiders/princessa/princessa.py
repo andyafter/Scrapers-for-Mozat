@@ -23,18 +23,25 @@ class PrincessaSpider(Spider):
     name = "princessa"
     allowed_domains = ["shopprincessa.com"]
     start_urls = (
-        'http://www.shopprincessa.com/',
+        'http://www.shopprincessa.com/store',
     )
 
     def __init__(self):
         # simple method to deal with XHR in this website
-        self.urls = ['http://www.shopprincessa.com/store' + '/page/' + str(i) for i in range(2,21)]
+        self.urls = []
         self.urls.append('http://www.shopprincessa.com/store')
+        self.urls.append("http://www.shopprincessa.com/new-arrivals")
 
     def parse(self, response):
-        for link in self.urls:
-            print "links"
-            yield Request(link, callback = self.parseBrief)
+        list_url = "http://www.shopprincessa.com/store"
+        soup = BeautifulSoup(str(response.body), 'lxml')
+        all_links = soup.find_all('a')
+        for a in all_links:
+            print a.get('href')
+        pass
+        # for link in self.urls:
+        #     print "links"
+        #     yield Request(link, callback = self.parseBrief)
 
     def parseBrief(self, response):
         soup = BeautifulSoup(str(response.body), 'lxml')

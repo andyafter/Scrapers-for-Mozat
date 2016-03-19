@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import scrapy.Spider as Spider
+import scrapy
 from scrapy import signals
 from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
@@ -19,7 +19,7 @@ import logging
 import re
 
 
-class BershkaSpider(Spider):
+class BershkaSpider(scrapy.Spider):
     name = "bershka"
     allowed_domains = ["bershka.com"]
     start_urls = (

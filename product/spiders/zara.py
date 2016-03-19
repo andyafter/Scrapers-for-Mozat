@@ -25,11 +25,6 @@ class ZaraSpider(BaseSpider):
             if not link.get('class'):
                 continue
             if '_category-link' in link.get('class'):
-                # category links are all the categories
-                # click inside there will be a list of li tags whoes class contains
-                # "product", and these li tags contains information that you need
-                # after you click inside the product refereces, there will be detailed information
-                # that you need
                 for a in link.findAll('a'):
                     url = a.get('href')
                     meta  = {} # this is used to store the data
